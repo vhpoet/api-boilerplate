@@ -1,8 +1,9 @@
 'use strict'
 
 import Koa from 'koa'
+import addRouter from './router'
 
-const app = new Koa()
+let app = new Koa()
 
 app.use(async (ctx, next) => {
   try {
@@ -13,9 +14,7 @@ app.use(async (ctx, next) => {
   }
 })
 
-app.use(async ctx => {
-  ctx.body = {status: 'ok'}
-})
+app = addRouter(app)
 
 app.listen(3100)
 
