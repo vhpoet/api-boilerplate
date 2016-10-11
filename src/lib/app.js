@@ -2,6 +2,7 @@
 
 import Koa from 'koa'
 import compress from 'koa-compress'
+import cors from 'koa-cors'
 import addRouter from './router'
 
 let app = new Koa()
@@ -17,8 +18,9 @@ app.use(async (ctx, next) => {
 
 app = addRouter(app)
 
-app.use(compress())
-
-app.listen(3100)
+app
+  .use(compress())
+  .use(cors())
+  .listen(3100)
 
 export default app
