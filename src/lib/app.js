@@ -9,6 +9,7 @@ import errorHandler from '../middlewares/error-handler'
 import Config from './config'
 import Log from './log'
 import Router from './router'
+import Db from './db'
 
 // Configure passport
 import '../lib/auth'
@@ -18,6 +19,7 @@ export default class App {
     this.config = deps(Config)
     this.logger = deps(Log)
     this.log = this.logger.create('app')
+    this.db = deps(Db)
   }
 
   async start () {
@@ -31,6 +33,8 @@ export default class App {
 
     Log.attach(this, app)
     Router.attach(app)
+
+    await this.db.sync()
 
     app.listen(this.config.data.get('port'))
 

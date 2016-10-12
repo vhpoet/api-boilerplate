@@ -1,7 +1,11 @@
-import get from 'lodash/get'
+import _ from 'lodash'
 import ServerError from '../errors/server-error'
 
 const envPrefix = 'api'
+
+function removeUndefined (obj) {
+  return _.omitBy(obj, _.isUndefined)
+}
 
 /**
  * Parse a boolean config variable.
@@ -69,6 +73,29 @@ function getLogLevel () {
   return getEnv(envPrefix, 'LOG_LEVEL') || 'info'
 }
 
+/*
+ * Parse the database configuration settings from the environment.
+ */
+function parseDatabaseConfig (prefix) {
+  // Database URI
+  let uri = getEnv(prefix, 'DB_URI')
+
+  // Synchronize schema when the application starts
+  // When using SQLite in-memory database, default to sync enabled
+  const sync = castBool(getEnv(prefix, 'DB_SYNC'), false)
+
+  // User for connecting to DB
+  const connection_user = getEnv(prefix, 'DB_CONNECTION_USER')
+  const connection_password = getEnv(prefix, 'DB_CONNECTION_PASSWORD')
+
+  return removeUndefined({
+    uri,
+    sync,
+    connection_user,
+    connection_password
+  })
+}
+
 const configProto = {}
 
 /**
@@ -80,10 +107,10 @@ const configProto = {}
  *
  */
 configProto.get = function (propertyPath, defaultValue) {
-  return get(this, propertyPath, defaultValue)
+  return _.get(this, propertyPath, defaultValue)
 }
 configProto.getIn = function (propertyList, defaultValue) {
-  return get(this, propertyList, defaultValue)
+  return _.get(this, propertyList, defaultValue)
 }
 
 export default class Config {
@@ -92,6 +119,7 @@ export default class Config {
 
     localConfig.logLevel = getLogLevel()
     localConfig.port = getEnv(envPrefix, 'PORT')
+    localConfig.db = parseDatabaseConfig(envPrefix)
 
     this.data = Object.assign(Object.create(configProto), localConfig)
     deepFreeze(this.data)
