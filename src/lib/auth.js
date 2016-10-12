@@ -1,5 +1,3 @@
-'use strict'
-
 import passport from 'koa-passport'
 import { BasicStrategy } from 'passport-http'
 

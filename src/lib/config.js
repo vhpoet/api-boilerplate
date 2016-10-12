@@ -1,5 +1,3 @@
-'use strict'
-
 import get from 'lodash/get'
 import ServerError from '../errors/server-error'
 

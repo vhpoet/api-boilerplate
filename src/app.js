@@ -1,5 +1,3 @@
-'use strict'
-
 import reduct from 'reduct'
 import App from './lib/app'
 
