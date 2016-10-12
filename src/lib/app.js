@@ -5,9 +5,10 @@ import bodyParser from 'koa-bodyparser'
 import compress from 'koa-compress'
 import cors from 'koa-cors'
 import passport from 'koa-passport'
-import attachRouter from './router'
 
-import Config from '../lib/config'
+import Config from './config'
+import Log from './log'
+import Router from './router'
 
 // Configure passport
 import '../lib/auth'
@@ -15,6 +16,8 @@ import '../lib/auth'
 export default class App {
   constructor (deps) {
     this.config = deps(Config)
+    this.logger = deps(Log)
+    this.log = this.logger.create('app')
   }
 
   async start () {
@@ -34,8 +37,11 @@ export default class App {
     app.use(cors())
     app.use(passport.initialize())
 
-    attachRouter(app)
+    Log.attach(this, app)
+    Router.attach(app)
 
     app.listen(this.config.data.get('port'))
+
+    this.log.info('listening on port ' + this.config.data.get('port'))
   }
 }

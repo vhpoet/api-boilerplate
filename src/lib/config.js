@@ -66,6 +66,11 @@ function deepFreeze (o) {
   return o
 }
 
+function getLogLevel () {
+  // https://github.com/trentm/node-bunyan#levels
+  return getEnv(envPrefix, 'LOG_LEVEL') || 'info'
+}
+
 const configProto = {}
 
 /**
@@ -87,6 +92,7 @@ export default class Config {
   constructor() {
     const localConfig = {}
 
+    localConfig.logLevel = getLogLevel()
     localConfig.port = getEnv(envPrefix, 'PORT')
 
     this.data = Object.assign(Object.create(configProto), localConfig)

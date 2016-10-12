@@ -6,8 +6,10 @@
   },
   "dependencies": {
     "babel-runtime": "^6.11.6",
+    "bunyan": "^1.8.1",
     "koa": "^2.0.0",
     "koa-bodyparser": "^3.2.0",
+    "koa-bunyan-logger": "^2.0.0-pre1",
     "koa-compress": "^2.0.0",
     "koa-cors": "0.0.16",
     "koa-passport": "^2.2.2",
