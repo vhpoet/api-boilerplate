@@ -12,7 +12,8 @@
     "koa-cors": "0.0.16",
     "koa-passport": "^2.2.2",
     "koa-router": "^7.0.1",
-    "passport-http": "^0.3.0"
+    "passport-http": "^0.3.0",
+    "reduct": "^2.0.0"
   },
   "devDependencies": {
     "babel": "^6.5.2",

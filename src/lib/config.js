@@ -83,34 +83,13 @@ configProto.getIn = function (propertyList, defaultValue) {
   return get(this, propertyList, defaultValue)
 }
 
-/**
- * @param {String} prefix Prefix to apply to all env variable names. Should be
- *   in lowercase with dashes as separators. Will automatically be converted
- *   to uppercase with underscores or other formats as necessary.
- *
- * @param {Object} [localConfig]
- * @param {Object} [options]
- * @param {Boolean} [options.ed25519] - 'false' if config should not parse ed25519 keypair
- * @returns {Object} - Frozen Config
- *
- * @example
- *   const config = loadConfig(localConfig)
- *   config.toJS()
- *   => { foo: {bar: 'baz'} }
- *
- *   config.getIn(['foo', 'bar'])
- *   => 'baz'
- *
- *   config.get('foo').toJS()
- *   => {bar: 'baz'}
- *
- */
-export default function loadConfig () {
-  const localConfig = {}
+export default class Config {
+  constructor() {
+    const localConfig = {}
 
-  localConfig.port = getEnv(envPrefix, 'PORT')
+    localConfig.port = getEnv(envPrefix, 'PORT')
 
-  const completeConfig = Object.assign(Object.create(configProto), localConfig)
-  deepFreeze(completeConfig)
-  return completeConfig
+    this.data = Object.assign(Object.create(configProto), localConfig)
+    deepFreeze(this.data)
+  }
 }

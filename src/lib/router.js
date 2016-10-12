@@ -11,7 +11,7 @@ router.get('/protected', passport.authenticate('basic', { session: false }), (ct
   ctx.body = {status: 'ok'}
 })
 
-export default function addRouter(app) {
+export default function attachRouter(app) {
   app.use(router.routes())
   app.use(router.allowedMethods())
 

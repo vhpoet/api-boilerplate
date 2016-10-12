@@ -5,18 +5,20 @@ import bodyParser from 'koa-bodyparser'
 import compress from 'koa-compress'
 import cors from 'koa-cors'
 import passport from 'koa-passport'
-import addRouter from './router'
+import attachRouter from './router'
 
-import config from '../services/config'
+import Config from '../lib/config'
 
 // Configure passport
-import '../services/auth'
+import '../lib/auth'
 
 export default class App {
-  constructor () {
-    this.config = config
+  constructor (deps) {
+    this.config = deps(Config)
+  }
 
-    let app = new Koa()
+  async start () {
+    const app = this.app = new Koa()
 
     app.use(async (ctx, next) => {
       try {
@@ -32,8 +34,8 @@ export default class App {
     app.use(cors())
     app.use(passport.initialize())
 
-    app = addRouter(app)
+    attachRouter(app)
 
-    app.listen(this.config.get('port'))
+    app.listen(this.config.data.get('port'))
   }
 }
