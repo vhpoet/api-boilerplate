@@ -19,6 +19,7 @@ export default class App {
     this.config = deps(Config)
     this.logger = deps(Log)
     this.log = this.logger.create('app')
+    this.router = deps(Router)
     this.db = deps(Db)
   }
 
@@ -32,7 +33,7 @@ export default class App {
     app.use(passport.initialize())
 
     Log.attach(this, app)
-    Router.attach(app)
+    this.router.attach(app)
 
     await this.db.sync()
 
